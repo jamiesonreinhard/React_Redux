@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 import ValidationComponent from './ValidationComponent/ValidationComponent';
+import CharComponent from './CharComponent/CharComponent';
+
 
 class App extends Component {
 
@@ -11,7 +13,27 @@ class App extends Component {
   lengthChangeHandler = (event) => {
     this.setState( {text: event.target.value} )
   };
+
+  deleteCharHandler = (index) => {
+    const characters = [...this.state.text.split("")];
+    characters.splice(index, 1)
+    const updatedChar = characters.join('');
+    this.setState({text: updatedChar});
+  };
+
   render() {
+
+    const characters = (
+      <div>
+        {this.state.text.split("").map((character, index) => {
+          return <CharComponent 
+            value={character}
+            key={index}
+            clicked={() => this.deleteCharHandler(index)} />
+        })}
+      </div>
+    )
+
     return (
       <div className="App">
         <ol>
@@ -27,6 +49,7 @@ class App extends Component {
         onChange={this.lengthChangeHandler} 
         value={this.state.text}></input>
         <ValidationComponent length={this.state.text.length} />
+        {characters}
       </div>
     );
   }
